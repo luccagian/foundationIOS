@@ -1,0 +1,26 @@
+import Foundation
+
+struct DogAPI {
+    
+    static let baseURL = URL(string: "https://dog.ceo/api/breeds/image/random")!
+    
+    static var decoder: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        return decoder
+    }
+    
+    static func fetchUser() async throws -> Dog {
+        
+        let url = baseURL
+        
+        let request = URLRequest(url: url)
+        
+        let (data, _) = try await URLSession.shared.data(for: request)
+        
+        let dog = try decoder.decode(Dog.self, from: data)
+
+        return dog
+    }
+}
